@@ -22,35 +22,34 @@
 			</div>
 		</div>
 	</div>
-<br>
+	<br>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-2">
-				
+
 			</div>
 			<div class="col-md-10">
-				
-				<form id="search_form" name="search_form" method="get" action="//python_result.php" class="form-inline">
+
+				<form ng-submit="submit()" ng-controller="FormController" id="search_form" name="search_form" class="form-inline">
 					<div class="form-group">
 						<label class="sr-only" for="search_user">Search User</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="search_user" name="search_user" 
-							ng-minlength=3 
-							ng-maxlength=20 
-							ng-pattern="[a-zA-Z0-9]" 
+							<input type="text" class="form-control" id="search_user" name="search_user" ng-model="search_user"
+							ng-minlength=3
+							ng-maxlength=20
 							placeholder="Search User" required>
 							<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div>
 						</div>
 					</div>
 					<button type="submit" class="btn btn-primary">Analyze</button>
-				</form>	
+				</form>
 
 			</div>
 		</div>
-		<div id="main" class="clearfix overflow-hidden">
-	        <!-- xhr content would be added here -->
-	        <div data-ng-view class="view-fade-in"></div>
-	    </div>
+		<div id="main" ng-controller="ViewController" class="clearfix overflow-hidden">
+			<!-- xhr content would be added here -->
+			<div data-ng-view class="view-fade-in"></div>
+		</div>
 	</div>
 	<base href="/">
 </body>
