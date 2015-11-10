@@ -1,0 +1,23 @@
+.header-bg{
+	background-color:#181712;
+}
+
+.first-page-center-bg{
+	background-color:#50a5e6;
+}
+
+.footer-bg{
+	background-color:#494949;
+}
+
+.text-white{
+	color:#FFF;
+}
+.add-on{
+	padding:0px !important;
+	border:0px !important;
+	background-color:transparent; !important;
+}
+.zero-border-radius{
+	border-radius:0px !important;
+}

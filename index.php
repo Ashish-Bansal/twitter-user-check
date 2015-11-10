@@ -5,8 +5,9 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Twitter Crawler</title>
+	<title>Twitter Spy</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="js/jquery-1.11.3.min.js"></script>
@@ -15,42 +16,30 @@
 </head>
 
 <body ng-app='app'>
-	<div class="container-fluid">
+	<div class="container-fluid header-bg" id="header">
 		<div class="row">
 			<div class="col-md-12" style="background-color:#000">
-				<img src="twitter-bird-light-bgs.png" class="img-responsive">
+				<div class="col-md-4">
+					<img src="twitter-bird-light-bgs.png" class="img-responsive">
+				</div>
 			</div>
 		</div>
 	</div>
-	<br>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-2">
 
-			</div>
-			<div class="col-md-10">
 
-				<form ng-submit="submit()" ng-controller="FormController" id="search_form" name="search_form" class="form-inline">
-					<div class="form-group">
-						<label class="sr-only" for="search_user">Search User</label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="search_user" name="search_user" ng-model="search_user"
-							ng-minlength=3
-							ng-maxlength=20
-							placeholder="Search User" required>
-							<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div>
-						</div>
-					</div>
-					<button type="submit" class="btn btn-primary">Analyze</button>
-				</form>
-
-			</div>
-		</div>
 		<div id="main" ng-controller="ViewController" class="clearfix overflow-hidden">
 			<!-- xhr content would be added here -->
 			<div data-ng-view class="view-fade-in"></div>
 		</div>
+
+	<div class="container-fluid footer-bg" id="footer">
+		<div class="row">
+			<div class="col-md-12 text-white">
+				<h5><span class="glyphicon glyphicon-copyright-mark"></span>Copyright 2015.</h5>
+			</div>
+		</div>
 	</div>
+
 	<base href="/">
 </body>
 
