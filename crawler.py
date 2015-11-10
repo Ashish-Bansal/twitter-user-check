@@ -20,17 +20,17 @@ import datetime
 import csv
 import string
 import requests
-import tweepy
-f = open("idlaef", 'w')
-f.write("HEREW")
-f.close()
 import random
 import os
 import sys
 import argparse
+import tweepy
+import math
+
 
 class TwitterAPI(object):
     def __init__(self, api_index_list):
+        self.theta = 1
         self.depth = 1
         self.userInfoFilename = "userinfo.csv"
         self.tweetListFilename = "tweetList.csv"
@@ -54,6 +54,9 @@ class TwitterAPI(object):
 
     def set_user_info_filename(self, userinfofile):
         self.userInfoFilename = userinfofile
+
+    def set_probability_filename(self, messageFilename):
+        self.messageFilename = messageFilename
 
     def test_apis(self):
         tested_apis = []
@@ -551,6 +554,27 @@ class TwitterAPI(object):
         print "-" * 15
         print "Goodbye!\n"
 
+    def calculate_probablity(self):
+        file_path = self.dir_path + self.processedTweetsFilename
+        data = []
+        data.append(1.0)
+        with open(file_path, 'rb') as csvfile:
+            csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+            for row in csvreader:
+                for column in row:
+                    data.append(column)
+        computed = []
+        for i in data:
+            computed.append(self.sigmoid(self.theta*float(i)))
+        prob = float(sum(computed))/len(computed) if len(computed) > 0 else float('nan')
+        f = open(self.dir_path + self.messageFilename, 'w')
+        f.write("Real Account") if prob < 0.5 else f.write("Fake Account")
+        f.close()
+
+    def sigmoid(self, x):
+        return 1 / (1 + math.exp(-x))
+
+
 def main():
     parser = argparse.ArgumentParser()
     requiredArguments = parser.add_argument_group('Required arguments')
@@ -558,6 +582,7 @@ def main():
     parser.add_argument('--userfile', default="userinfo.csv")
     parser.add_argument('--tweetfile', default="tweetList.csv")
     parser.add_argument('--resultfile', default="processedTweets.csv")
+    parser.add_argument('--probabilityfile', default="probablity.csv")
     parser.add_argument("--connections", default="1", type=int)
     parser.add_argument("--depth", default="0", type=int)
     args = parser.parse_args()
@@ -572,7 +597,9 @@ def main():
     crawler.set_tweet_filename(args.tweetfile)
     crawler.set_processed_tweets_filename(args.resultfile)
     crawler.set_user_info_filename(args.userfile)
+    crawler.set_probability_filename(args.probabilityfile)
     crawler.crawl(seed)
+    crawler.calculate_probablity()
 
 
 if __name__ == '__main__':
