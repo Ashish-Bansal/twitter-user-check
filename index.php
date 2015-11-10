@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+	<base href="/">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,10 +28,10 @@
 	</div>
 
 
-		<div id="main" ng-controller="ViewController" class="clearfix overflow-hidden">
-			<!-- xhr content would be added here -->
-			<div data-ng-view class="view-fade-in"></div>
-		</div>
+	<div id="main" ng-controller="ViewController" class="clearfix overflow-hidden">
+		<!-- xhr content would be added here -->
+		<div data-ng-view class="view-fade-in"></div>
+	</div>
 
 	<div class="container-fluid footer-bg" id="footer">
 		<div class="row">
@@ -39,8 +40,6 @@
 			</div>
 		</div>
 	</div>
-
-	<base href="/">
 </body>
 
 <script type="text/javascript" src="js/angular.js"></script>
