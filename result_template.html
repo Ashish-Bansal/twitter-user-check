@@ -1,0 +1,72 @@
+<section id="tweet_dynamic">
+	<div class="container-fluid ">
+		<div class="row first-page-center-bg">
+			<div class="col-md-5 pull-right">
+				<br>
+				<form ng-submit="submit()" ng-controller="FormController" id="search_form" name="search_form" class="form-inline">
+
+					<div class="form-group">
+						<label class="sr-only" for="search_user">Search User</label>
+						<div class="input-group">
+
+							<input type="text" class="form-control input-lg zero-border-radius" id="search_user" name="search_user" ng-model="search_user"
+							ng-minlength=3
+							ng-maxlength=20
+							placeholder="Search User" required>
+
+							<div class="input-group-addon add-on">
+								<button type="submit" class="btn btn-lg btn-primary zero-border-radius">Analyze</button>
+							</div>
+						</div>
+					</div>
+
+				</form>
+				<br>
+			</div>
+		</div>
+	</div>
+	<br><br>
+	<div class="container">
+		<div class="row" >
+			<div class="col-md-8 col-centered">
+				<div style="height:80px" class="first-page-center-bg"></div>
+				<div class="col-md-2">
+					<img src="user.jpg" ng-hide="fetched" class="img-circle img-responsive" style="margin-top:-60px">
+					<img src="{{result.profile_image_url}}" ng-show="fetched" class="img-circle img-responsive" style="margin-top:-60px">
+				</div>
+				<div class="col-md-4" style="margin-top:-60px">
+					<h3 ng-show="fetched">{{result.name}}</h3>
+					<div ng-hide="fetched" class="loading"></div>
+				</div>
+
+				<div class="col-md-4">
+					<small>
+						<span ng-show="fetched"><a href="http://twitter.com/{{result.screen_name}}">@{{result.screen_name}}</a></span>
+						<div ng-hide="fetched" class="loading"></div>
+					</small>
+					<br>
+					<h5>
+						<span ng-show="fetched" class="glyphicon glyphicon-map-marker"></span>
+						<span ng-show="fetched">{{result.location}}</span>
+						<div ng-hide="fetched" class="loading"></div>
+					</h5>
+					<h6>
+						<span ng-show="fetched">Joined on {{result.created_at}}</span>
+						<div ng-hide="fetched" class="loading"></div>
+					</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="js/loadingdiv.js"></script>
+<link href="css/loadingdiv.css" rel="stylesheet">
+<script>
+$('.loading').loadingdiv({
+	number : 5,
+	color : '#00e7ed',
+	animation_time : 1,
+});
+</script>
+
