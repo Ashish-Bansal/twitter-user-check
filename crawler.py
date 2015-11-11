@@ -17,7 +17,7 @@
 
 import time
 import datetime
-import csv
+import json
 import string
 import requests
 import random
@@ -32,9 +32,9 @@ class TwitterAPI(object):
     def __init__(self, api_index_list):
         self.theta = 1
         self.depth = 1
-        self.userInfoFilename = "userinfo.csv"
-        self.tweetListFilename = "tweetList.csv"
-        self.processedTweetsFilename = "processedTweets.csv"
+        self.userInfoFilename = "userinfo.json"
+        self.tweetListFilename = "tweetList.json"
+        self.processedTweetsFilename = "processedTweets.json"
         self.users_to_crawl = []
         self.crawled_users = {}
         self.api_index_to_use = api_index_list
@@ -216,30 +216,29 @@ class TwitterAPI(object):
     def extract_user_details(self, user):
         # extract required details from user object
         # and write to FILE 1
-        data = []
-        data.append(str(user.id))
-        data.append(user.screen_name.encode('utf-8'))
-        data.append(user.description.encode('utf-8'))
-        data.append(user.name.encode('utf-8'))
-        data.append(user.location.encode('utf-8'))
-        data.append(str(user.statuses_count))
-        data.append(str(user.followers_count))
-        data.append(str(user.friends_count))
-        data.append(str(user.created_at.date()))
-        data.append(str(user.profile_image_url).replace("normal", "400x400"))
+        data_user_info = {}
+        data_user_info['userid'] = str(user.id)
+        data_user_info['screen_name'] = (user.screen_name.encode('utf-8'))
+        data_user_info['description'] = user.description.encode('utf-8')
+        data_user_info['name'] = user.name.encode('utf-8')
+        data_user_info['location'] = user.location.encode('utf-8')
+        data_user_info['statuses_count'] = str(user.statuses_count)
+        data_user_info['followers_count'] = str(user.followers_count)
+        data_user_info['friends_count'] = str(user.friends_count)
+        data_user_info['created_at'] = str(user.created_at.date())
+        data_user_info['profile_image_url'] = str(user.profile_image_url).replace("normal", "400x400")
 
         # calculate age of account (in days)
         old = user.created_at.date()
         today = datetime.date.today()
         age_in_days = (today - old).days
-        data.append(str(age_in_days))
+        data_user_info['age_in_days'] = str(age_in_days)
 
-        # write csv row to file
+        # write json row to file
         file_path = self.dir_path + self.userInfoFilename
-        csvfile = open(file_path, 'a')
-        writer = csv.writer(csvfile, quoting = csv.QUOTE_ALL)
-        writer.writerow(data)
-        csvfile.close()
+        with open(file_path, 'a') as fp:
+            json.dump(data_user_info, fp)
+            fp.write(os.linesep)
 
     def get_full_url(self, short_url):
         try:
@@ -395,14 +394,9 @@ class TwitterAPI(object):
 
         # open output FILE 2
         file_path_2 = self.dir_path + self.tweetListFilename
-        csvfile_2 = open(file_path_2, 'a')
-        writer_2 = csv.writer(csvfile_2, quoting = csv.QUOTE_ALL)
 
         # open output FILE 3
         file_path_3 = self.dir_path + self.processedTweetsFilename
-        csvfile_3 = open(file_path_3, 'a')
-        writer_3 = csv.writer(csvfile_3, quoting = csv.QUOTE_ALL)
-
         reply_count = 0
         hashtag_count = 0
         repeated_hashtag_count = 0
@@ -418,13 +412,15 @@ class TwitterAPI(object):
             tweet_count += 1
             print tweet_count,
             tweets_processed = True
-            data = []
-            data.append(str(tweet.author.id))
-            data.append(tweet.text.encode('utf-8'))
-            data.append(str(tweet.created_at))
-            data.append(tweet.source.encode('utf-8'))
+            data_tweet_info = {}
+            data_tweet_info['tweet_author_id'] = str(tweet.author.id)
+            data_tweet_info['tweet_text'] = tweet.text.encode('utf-8')
+            data_tweet_info['tweet_created_at'] = str(tweet.created_at)
+            data_tweet_info['tweet_source'] = tweet.source.encode('utf-8')
             # write data for FILE 2
-            writer_2.writerow(data)
+            with open(file_path_2, 'a') as fp:
+                json.dump(data_tweet_info, fp)
+                fp.write(os.linesep)
 
             # extract data for FILE 3
             tweet_text = tweet.text.encode('utf-8')
@@ -459,22 +455,20 @@ class TwitterAPI(object):
         # structure data for FILE 3
         if tweets_processed:
 
-            data_3 = []
-            data_3.append(str(twitter_id))
-            data_3.append(str(reply_count))
-            data_3.append(str(len(intersection)))
-            data_3.append(str(reply_to_intersection))
-            data_3.append(str(hashtag_count))
-            data_3.append(str(repeated_hashtag_count))
-            data_3.append(str(url_tweet_count))
-            data_3.append(str(spam_url_tweet_count))
+            data_processed_tweets = {}
+            data_processed_tweets['twitter_id'] = str(twitter_id)
+            data_processed_tweets['reply_count'] = str(reply_count)
+            data_processed_tweets['intersection'] = str(len(intersection))
+            data_processed_tweets['reply_to_intersection'] = str(reply_to_intersection)
+            data_processed_tweets['hashtag_count'] = str(hashtag_count)
+            data_processed_tweets['repeated_hashtag_count'] = str(repeated_hashtag_count)
+            data_processed_tweets['url_tweet_count'] = str(url_tweet_count)
+            data_processed_tweets['spam_url_tweet_count'] = str(spam_url_tweet_count)
 
             # write data for FILE 3
-            writer_3.writerow(data_3)
-
-        # close files
-        csvfile_2.close()
-        csvfile_3.close()
+            with open(file_path_3, 'a') as fp:
+                json.dump(data_processed_tweets, fp)
+                fp.write(os.linesep)
 
     def process_user(self, user_id, intersection):
         # process user data
@@ -557,12 +551,8 @@ class TwitterAPI(object):
     def calculate_probablity(self):
         file_path = self.dir_path + self.processedTweetsFilename
         data = []
-        data.append(1.0)
-        with open(file_path, 'rb') as csvfile:
-            csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
-            for row in csvreader:
-                for column in row:
-                    data.append(column)
+        with open(file_path) as f:
+            [data.extend(json.loads(line).values()) for line in f]
         computed = []
         for i in data:
             computed.append(self.sigmoid(self.theta*float(i)))
@@ -579,10 +569,10 @@ def main():
     parser = argparse.ArgumentParser()
     requiredArguments = parser.add_argument_group('Required arguments')
     requiredArguments.add_argument('--handle', required=True)
-    parser.add_argument('--userfile', default="userinfo.csv")
-    parser.add_argument('--tweetfile', default="tweetList.csv")
-    parser.add_argument('--resultfile', default="processedTweets.csv")
-    parser.add_argument('--probabilityfile', default="probablity.csv")
+    parser.add_argument('--userfile', default="userinfo.json")
+    parser.add_argument('--tweetfile', default="tweetList.json")
+    parser.add_argument('--resultfile', default="processedTweets.json")
+    parser.add_argument('--probabilityfile', default="probablity.json")
     parser.add_argument("--connections", default="1", type=int)
     parser.add_argument("--depth", default="0", type=int)
     args = parser.parse_args()
