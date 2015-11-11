@@ -19,5 +19,9 @@
 	background-color:transparent; !important;
 }
 .zero-border-radius{
-	border-radius:0px !important;
+	border-radius: 0 !important;
+}
+.col-centered{
+    float: none;
+    margin: 0 auto;
 }
