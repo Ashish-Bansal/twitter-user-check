@@ -1,0 +1,70 @@
+.loading-bar {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin-right: 2px;
+	text-align: center;
+	font-size: 10px;
+	opacity: 0.2;
+	animation: loading 1s ease-in-out infinite;
+}
+
+@keyframes loading {
+	0% {
+		transform: scale(1);
+	}
+	20% {
+		transform: scale(1, 2.2);
+	}
+	40% {
+		transform: scale(1);
+	}
+}
+
+@-o-keyframes loading {
+	0% {
+		-o-transform: scale(1);
+	}
+	20% {
+		-o-transform: scale(1, 2.2);
+	}
+	40% {
+		-o-transform: scale(1);
+	}
+}
+
+@-ms-keyframes loading {
+	0% {
+		-ms-transform: scale(1);
+	}
+	20% {
+		-ms-transform: scale(1, 2.2);
+	}
+	40% {
+		-ms-transform: scale(1);
+	}
+}
+
+@-moz-keyframes loading {
+	0% {
+		-moz-transform: scale(1);
+	}
+	20% {
+		-moz-transform: scale(1, 2.2);
+	}
+	40% {
+		-moz-transform: scale(1);
+	}
+}
+
+@-webkit-keyframes loading {
+	0% {
+		-webkit-transform: scale(1);
+	}
+	20% {
+		-webkit-transform: scale(1, 2.2);
+	}
+	40% {
+		-webkit-transform: scale(1);
+	}
+}
